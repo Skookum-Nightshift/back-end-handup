@@ -3,7 +3,7 @@ class AddPropertiesToUser < ActiveRecord::Migration
     add_column :users, :first_name, :string
     add_column :users, :last_name, :string
     add_column :users, :active, :boolean, default: true, null: false
-
+    #rails g migration AddAddressToUser address:string
     # add_column :users, :profile_image, :string
     # add_column :users, :stripe_id, :string
   end

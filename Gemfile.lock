@@ -317,7 +317,6 @@ GEM
     orm_adapter (0.5.0)
     parser (2.2.2.6)
       ast (>= 1.1, < 3.0)
-    pg (0.18.3)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     powerpack (0.1.1)
@@ -496,7 +495,6 @@ DEPENDENCIES
   modernizr-rails
   net-ssh (= 2.10.1.rc1)
   nokogiri
-  pg
   premailer-rails
   proof-rails!
   pry-rails
