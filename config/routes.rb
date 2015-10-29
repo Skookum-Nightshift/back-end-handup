@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       post "/sign_in", to: "sessions#login" #api.lvh.me:3000/v1/sign_in
+      post "/add_card", to: "registrations#add_card" #api.lvh.me:3000/v1/add_card
+      post "/add_purchase", to: "registrations#add_purchase" #api.lvh.me:3000/v1/add_purchase
       resource :sign_up, only: [:create], controller: :registrations #api.lvh.me:3000/v1/sign_up
 
       scope :users do #api.lvh.me:3000/v1/users

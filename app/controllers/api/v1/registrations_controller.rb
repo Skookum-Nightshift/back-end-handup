@@ -16,9 +16,30 @@ class Api::V1::RegistrationsController < API::V1::BaseController
     end
   end
 
+
+  def add_card
+    @card = PaymentMethod.new(cc_params)
+    logger.debug "add_card"
+    render json: @card, serializer: Api::V1::PaymentMethodSerializer, root: nil
+  end
+
+  def add_purchase
+    @purchase = Purchase.new(purchase_params)
+    logger.debug "add_purchase"
+    render json: @purchase, serializer: Api::V1::PurchaseSerializer, root: nil
+  end
+
   private
 
     def user_params
       params.require(:user).permit(:first_name, :last_name, :email, :streetaddress, :city, :state, :zip)
+    end
+
+    def cc_params
+      params.require(:payment_method).permit(:cardnumber, :ccv, :expdate, :cardmembername)
+    end
+
+    def purchase_params
+      params.require(:purchase).permit(:user, :time, :amount, :quantity, :deliverymethod)
     end
 end
