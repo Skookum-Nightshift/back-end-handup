@@ -20,13 +20,21 @@ class Api::V1::RegistrationsController < API::V1::BaseController
   def add_card
     @card = PaymentMethod.new(cc_params)
     logger.debug "add_card"
-    render json: @card, serializer: Api::V1::PaymentMethodSerializer, root: nil
+    if @card.save
+      render json: @card, serializer: Api::V1::PaymentMethodSerializer, root: nil
+    else
+      render json: @card.errors, status: :unprocessable_entity
+    end
   end
 
   def add_purchase
     @purchase = Purchase.new(purchase_params)
     logger.debug "add_purchase"
-    render json: @purchase, serializer: Api::V1::PurchaseSerializer, root: nil
+    if @purchase.save
+      render json: @purchase, serializer: Api::V1::PurchaseSerializer, root: nil
+    else
+      render json:  @purchase.errors, status: :unprocessable_entity
+    end
   end
 
   private
