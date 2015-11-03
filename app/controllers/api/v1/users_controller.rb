@@ -8,7 +8,7 @@ class Api::V1::UsersController < API::V1::BaseController
   def update
     @user = User.find(current_user.id)
     if @user.update(user_params)
-      NotificationMailer.account_change(@user).deliver_now
+      #NotificationMailer.account_change(@user).deliver_now
       render json: @user, serializer: Api::V1::SessionSerializer, root: nil
     else
       render json: @user.errors, status: :unprocessable_entity

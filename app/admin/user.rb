@@ -2,7 +2,7 @@ ActiveAdmin.register User do
   scope :active, default: true
   scope :all
 
-  permit_params :id, :email, :first_name, :last_name, :password, :password_confirmation, :zip
+  permit_params :id, :email, :first_name, :last_name, :password, :password_confirmation, :streetaddress, :state, :city, :zip
 
   index do
     selectable_column
@@ -30,6 +30,9 @@ ActiveAdmin.register User do
       f.input :email
       f.input :password
       f.input :password_confirmation
+      f.input :streetaddress
+      f.input :state
+      f.input :city
       f.input :zip
     end
     f.actions
