@@ -16,7 +16,6 @@ class Api::V1::RegistrationsController < API::V1::BaseController
     end
   end
 
-
   def add_card
     @card = PaymentMethod.new(cc_params)
     logger.debug "add_card"
@@ -34,6 +33,15 @@ class Api::V1::RegistrationsController < API::V1::BaseController
       render json: @purchase, serializer: Api::V1::PurchaseSerializer, root: nil
     else
       render json:  @purchase.errors, status: :unprocessable_entity
+    end
+  end
+
+  def get_payments
+    @addPayment = Purchase.first(2)
+    if @addPayment
+      render json: @addPayment
+    else
+      render json:  @addPayment.errors, status: :unprocessable_entity
     end
   end
 
