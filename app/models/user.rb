@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
 
   # mount_uploader :profile_image, ImageUploader
 
+  has_many :payment_methods
+
   after_create :add_stripe_account
 
   scope :active, -> { where(active: true) }

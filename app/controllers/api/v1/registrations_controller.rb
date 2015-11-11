@@ -1,11 +1,18 @@
 class Api::V1::RegistrationsController < API::V1::BaseController
   require 'uri'
 
+  before_action only: [ :add_card, :add_purchase, :get_purchases, :get_pay_methods ] do
+    require_proof authenticatable: :User
+  end
+
   def create
     random_password = Devise.friendly_token.first(8)
     mapped_params = user_params
-    mapped_params[:password] = random_password
-    mapped_params[:password_confirmation] = random_password
+    #mapped_params[:password] = random_password
+    #mapped_params[:password_confirmation] = random_password
+
+    mapped_params[:password] = :password
+    mapped_params[:password_confirmation] = :password
 
     @user = User.new(mapped_params)
     if @user.save
@@ -17,9 +24,19 @@ class Api::V1::RegistrationsController < API::V1::BaseController
   end
 
   def add_card
-    @card = PaymentMethod.new(cc_params)
+    @card = current_user.payment_methods.new(cc_params)
     logger.debug "add_card"
     if @card.save
+      render json: @card, serializer: Api::V1::PaymentMethodSerializer, root: nil
+    else
+      render json: @card.errors, status: :unprocessable_entity
+    end
+  end
+
+  def remove_card
+    @card = PaymentMethod.find_by(cc_params)
+    logger.debug "remove_card"
+    if @card.delete
       render json: @card, serializer: Api::V1::PaymentMethodSerializer, root: nil
     else
       render json: @card.errors, status: :unprocessable_entity
@@ -36,12 +53,21 @@ class Api::V1::RegistrationsController < API::V1::BaseController
     end
   end
 
-  def get_payments
-    @addPayment = Purchase.first(2)
-    if @addPayment
-      render json: @addPayment
+  def get_purchases
+    @addPurchases = Purchase.first(10)
+    if @addPurchases
+      render json: @addPurchases
     else
-      render json:  @addPayment.errors, status: :unprocessable_entity
+      render json:  @addPurchases.errors, status: :unprocessable_entity
+    end
+  end
+
+  def get_pay_methods
+    @payMethods = PaymentMethod.first(10)
+    if @payMethods
+      render json: @payMethods, serializer: Api::V1::PaymentMethodSerializer, root: nil
+    else
+      render json:  @payMethods.errors, status: :unprocessable_entity
     end
   end
 
